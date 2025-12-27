@@ -24,8 +24,8 @@ COMBINED_FORMAT_MATCH = r"\[([^\+]+=[^\+]+)\+.*\]"
 COOKIEFILE = os.getenv('COOKIEFILE', '')
 USER_AGENT = os.getenv(
         'USER_AGENT',
-        "Mozilla/5.0 (X11; Linux x86_64; rv:140.0) "
-        + "Gecko/20100101 Firefox/140.0"
+        "Mozilla/5.0 (X11; Linux x86_64; rv:146.0) "
+        + "Gecko/20100101 Firefox/146.0"
 )
 
 
