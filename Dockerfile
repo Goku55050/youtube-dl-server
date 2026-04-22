@@ -1,18 +1,19 @@
-FROM python:3.13-alpine
-ENV COOKIEFILE=
-RUN adduser -D -h /usr/src/app python
+FROM python:3.13-slim
 
-RUN apk add --no-cache deno
-
-RUN mkdir -p /usr/src/app/.venv && chown python:python -R /usr/src/app
 WORKDIR /usr/src/app
 
-COPY --chown=python:python Pipfile Pipfile.lock /usr/src/app/
+# Install dependencies
+COPY requirements.txt ./
+RUN pip install --no-cache-dir -r requirements.txt
 
+# Copy the application code
+COPY youtube_dl_server.py .
+
+# Create a non-root user
+RUN useradd -m python
 USER python
-RUN pip install --user pipenv && python3 -m pipenv install --deploy
-COPY --chown=python:python youtube_dl_server.py /usr/src/app/
 
+# Expose the port (Render uses PORT env variable)
 EXPOSE 8080
 
-CMD ["python3", "-m", "pipenv", "run", "execute"]
+CMD ["sh", "-c", "python -m uvicorn youtube_dl_server:app --host 0.0.0.0 --port ${PORT:-8080}"]
